@@ -1,0 +1,28 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: sandyvirus
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: email
+
+
+provider:
+  name: aws
+  runtime: python3.12
+  # environment:
+  #   SENDER_EMAIL: "your@gmail.com"   # set via env or CI; don't commit real creds
+  #   SMTP_HOST: "smtp.gmail.com"
+  #   SMTP_PORT: "465"
+  iam:
+    role:
+      statements: []   # SMTP doesn't need AWS permissions; keep empty or tighten as needed
+
+plugins:
+  - serverless-offline
+
+functions:
+  sendEmail:
+    handler: handler.send_email
+    timeout: 30
+    events:
+      - http:
+          path: send-mail
+          method: post
